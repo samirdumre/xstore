@@ -3,11 +3,12 @@
 namespace Hazesoft\Backend\Validations;
 
 use Exception;
-use Hazesoft\Backend\Validation\Validation;
+use Hazesoft\Backend\Validations\Validation;
 use Hazesoft\Backend\Validations\ValidationException as ValidationException;
 
 class SignupValidation extends Validation{
-    public function validateUserInput(array $inputArray){
+    public function validateUserInput(array $inputArray): bool
+    {
         [$firstName, $middleName, $lastName, $address, $email, $password, $confirmPassword] = $inputArray; // destructuring of array
         
         try {
@@ -32,7 +33,7 @@ class SignupValidation extends Validation{
         
     }
 
-    public function validateName(string $name, string $type)
+    public function validateName(string $name, string $type): int
     {  // type = first name, midlle name or last name
         $name = $this->sanitizeData($name);
         if (empty($name)) {
@@ -44,7 +45,7 @@ class SignupValidation extends Validation{
         return 1; // No error
     }
 
-    public function validateAddress(string $address)
+    public function validateAddress(string $address): int
     {
         $address = $this->sanitizeData($address);
         if (empty($address)) {
@@ -56,7 +57,7 @@ class SignupValidation extends Validation{
         return 1;
     }
 
-    public function validateEmail(string $email)
+    public function validateEmail(string $email): int
     {
         $email = $this->sanitizeData($email);
         if (empty($email)) {
@@ -68,7 +69,7 @@ class SignupValidation extends Validation{
         return 1;
     }
 
-    public function validatePassword(string $password, string $confirmPassword)
+    public function validatePassword(string $password, string $confirmPassword): int
     {
         $password = $this->sanitizeData($password);
         $confirmPassword = $this->sanitizeData($confirmPassword);

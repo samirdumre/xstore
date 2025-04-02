@@ -1,6 +1,6 @@
 <?php
 
-namespace Hazesoft\Backend\Validation;
+namespace Hazesoft\Backend\Validations;
 
 abstract class Validation
 {

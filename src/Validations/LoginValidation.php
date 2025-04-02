@@ -3,7 +3,7 @@
 namespace Hazesoft\Backend\Validations;
 
 use Exception;
-use Hazesoft\Backend\Validation\Validation;
+use Hazesoft\Backend\Validations\Validation;
 use Hazesoft\Backend\Validations\ValidationException as ValidationException;
 
 class LoginValidation extends Validation

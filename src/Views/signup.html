@@ -7,7 +7,7 @@
   </head>
   <body>
     <div>
-      <form action="../Validations/SignupValidation.php" method="POST">
+      <form action="../Controllers/ValidationControllers/signup.php" method="POST">
         <div class="input">
           <div>
             <label for="first_name">First Name: </label>
@@ -23,19 +23,19 @@
           </div>
           <div>
             <label for="address">Address: </label>
-            <input type="text" name="address" />
+            <input type="text" name="address" required/>
           </div>
           <div>
             <label for="email">Email: </label>
-            <input type="email" name="email" />
+            <input type="email" name="email" required/>
           </div>
           <div>
             <label for="password">Create Password: </label>
-            <input type="password" name="password" />
+            <input type="password" name="password" required/>
           </div>
           <div>
             <label for="confirm_password">Confirm Password </label>
-            <input type="password" name="confirmPassword" />
+            <input type="password" name="confirmPassword" required />
           </div>
           <div>
             <button type="submit" name="submit">Submit</button>

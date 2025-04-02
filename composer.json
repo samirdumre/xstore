@@ -1,5 +1,5 @@
 {
-    "name": "samir/form-handeling",
+    "name": "samir/xstore",
     "autoload": {
         "psr-4": {
             "Hazesoft\\Backend\\": "src/"
@@ -11,7 +11,5 @@
             "email": "samirdumre234@gmail.com"
         }
     ],
-    "require": {
-        "symfony/var-dumper": "^7.2"
-    }
+    "require": {}
 }
