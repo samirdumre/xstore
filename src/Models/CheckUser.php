@@ -7,17 +7,19 @@ require(__DIR__ . '/../../vendor/autoload.php');
 use Exception;
 use Hazesoft\Backend\Config\Connection;
 
-$connection = new Connection('127.0.0.1', 'root', '', 'mydb');
-$conn = $connection->connect();
-
 class CheckUser
 {
+    private $conn;
+    public function __construct()
+    {
+        $connection = new Connection();
+        $this->conn = $connection->connect();
+    }
     public function checkUser($email, $password)
     {
         try {
-            global $conn;
             $sql = "SELECT `id`, `first_name`, email`, `password` FROM users WHERE `email`='$email'";
-            $userData = $conn->query($sql);
+            $userData = $this->conn->query($sql);
 
             $row = $userData->fetch_assoc();
             $hashed_password = $row["password"];
