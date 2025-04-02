@@ -7,6 +7,7 @@ require(__DIR__ . '/../../vendor/autoload.php');
 use Exception;
 use Hazesoft\Backend\Validations\SignupValidation;
 use Hazesoft\Backend\Validations\ValidationException;
+use Hazesoft\Backend\Models\InsertUser; // Ensure this is the correct namespace for InsertUser
 
 if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST')) {
     try {
@@ -33,6 +34,14 @@ if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST'
             echo "Signup validation successful";
 
             // send data to db
+            $insertUserObject = new InsertUser();
+            $result = $insertUserObject->insertUser($inputArray);
+
+            if($result){
+                echo"User created successfully";
+            } else {
+                echo "User creation failed";
+            }
 
         } else {
             throw new ValidationException("Signup validation error");

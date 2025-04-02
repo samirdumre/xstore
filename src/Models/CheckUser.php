@@ -15,10 +15,11 @@ class CheckUser
         $connection = new Connection();
         $this->conn = $connection->connect();
     }
-    public function checkUser($email, $password)
+    public function checkUser($inputArray)
     {
         try {
-            $sql = "SELECT `id`, `first_name`, email`, `password` FROM users WHERE `email`='$email'";
+            [$email, $password] = $inputArray;
+            $sql = "SELECT `id`, `first_name`, `email`, `password` FROM users WHERE `email`='$email'";
             $userData = $this->conn->query($sql);
 
             $row = $userData->fetch_assoc();
