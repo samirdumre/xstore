@@ -6,15 +6,15 @@ require(__DIR__ . '/../../vendor/autoload.php');
 
 use Exception;
 use Hazesoft\Backend\Validations\Validation;
-//use Hazesoft\Backend\Validations\Exception as Exception;
+use Hazesoft\Backend\Validations\ValidationException;
 
 class LoginValidation extends Validation
 {
     public function validateUserInput(array $inputArray)
     {
-        [$email, $password] = $inputArray;
-
         try {
+            [$email, $password] = $inputArray;
+
             // validation status
             $isValidationOk = 0;
 
@@ -27,34 +27,40 @@ class LoginValidation extends Validation
                 return false;
             }
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            throw new ValidationException($exception->getMessage());
         }
     }
 
     public function validateEmail(string $email)
     {
-        $email = $this->sanitizeData($email);
-        if (empty($email)) {
-            throw new Exception("Email is required.");
+        try {
+            $email = $this->sanitizeData($email);
+            if (empty($email)) {
+                throw new ValidationException("Email is required.");
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new ValidationException("Invalid email format.");
+            }
+            return 1;
+        } catch (Exception $exception) {
+            throw new ValidationException($exception->getMessage());
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Invalid email format.");
-        }
-        return 1;
     }
 
     public function validatePassword(string $password)
     {
-        $password = $this->sanitizeData($password);
+        try {
+            $password = $this->sanitizeData($password);
 
-        if (empty($password)) {
-            throw new Exception("Password is required.");
+            if (empty($password)) {
+                throw new ValidationException("Password is required.");
+            }
+            if (strlen($password) < 8) {
+                throw new ValidationException("Password must be at least 8 characters long.");
+            }
+            return 1;
+        } catch (Exception $exception) {
+            throw new ValidationException($exception->getMessage());
         }
-        if (strlen($password) < 8) {
-            throw new Exception("Password must be at least 8 characters long.");
-        }
-        return 1;
     }
 }
-
-

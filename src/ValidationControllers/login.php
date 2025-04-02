@@ -6,35 +6,35 @@ require(__DIR__ . '/../../vendor/autoload.php');
 
 use Exception;
 use Hazesoft\Backend\Validations\LoginValidation;
-//use Hazesoft\Backend\Validations\Exception as Exception;
+use Hazesoft\Backend\Validations\ValidationException;
+
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    // Capture form data
-    $inputArray = [
-        $_POST['email'] ?? '',
-        $_POST['password'] ?? ''
-    ];
-
-    // Initialize validation
-    try{
-        $loginValidator = new LoginValidation();
-    } catch (Exception $exception){
-        throw new Exception($exception->getMessage());
+    try {
+        // Capture form data
+        $inputArray = [
+            $_POST['email'] ?? '',
+            $_POST['password'] ?? ''
+        ];
+    } catch (Exception $exception) {
+        throw new ValidationException($exception->getMessage());
     }
 
-
     try {
+        // Initialize validation
+        $loginValidator = new LoginValidation();
         $isLoginValid = $loginValidator->validateUserInput($inputArray);
 
         if ($isLoginValid) {
-            echo "Login validation successful";
+            echo("Login validation successful");
 
             // send data to db
 
         } else {
-            throw new Exception("Signin validation error");
+            echo "Validation error";
+            throw new ValidationException("Signin validation error");
         }
     } catch (Exception $exception) {
-        throw new Exception("Signin validation error: " . $exception->getMessage());
+        throw new ValidationException("Signin validation error: " . $exception->getMessage());
     }
 }

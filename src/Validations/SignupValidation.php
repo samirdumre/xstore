@@ -8,12 +8,12 @@ use Exception;
 use Hazesoft\Backend\Validations\Validation;
 //use Hazesoft\Backend\Validations\Exception as Exception;
 
-class SignupValidation extends Validation{
+class SignupValidation extends Validation
+{
     public function validateUserInput(array $inputArray): bool
     {
-        [$firstName, $middleName, $lastName, $address, $email, $password, $confirmPassword] = $inputArray; // destructuring of array
-        
         try {
+            [$firstName, $middleName, $lastName, $address, $email, $password, $confirmPassword] = $inputArray; // destructuring of array
             // validation status
             $isValidationOk = 0;
 
@@ -30,61 +30,77 @@ class SignupValidation extends Validation{
                 return false;
             }
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            throw new ValidationException($exception->getMessage());
         }
-        
     }
 
     public function validateName(string $name, string $type): int
-    {  // type = first name, midlle name or last name
-        $name = $this->sanitizeData($name);
-        if (empty($name)) {
-            throw new Exception("{$type} is required");
+    {
+        try {
+            // type = first name, midlle name or last name
+            $name = $this->sanitizeData($name);
+            if (empty($name) && $type != "Middle Name") {
+                throw new ValidationException("{$type} is required");
+            }
+            if (!preg_match("/^[a-zA-Z\s]+$/", $name) && $type != "Middle Name") {
+                throw new ValidationException("{$type} can contain only letters and spaces.");
+            }
+            return 1; // No error
+        } catch (Exception $exception) {
+            throw new ValidationException($exception->getMessage());
         }
-        if (!preg_match("/^[a-zA-Z\s]+$/", $name)) {
-            throw new Exception("{$type} can contain only letters and spaces.");
-        }
-        return 1; // No error
     }
 
     public function validateAddress(string $address): int
     {
-        $address = $this->sanitizeData($address);
-        if (empty($address)) {
-            throw new Exception("Address is required.");
+        try {
+            $address = $this->sanitizeData($address);
+            if (empty($address)) {
+                throw new ValidationException("Address is required.");
+            }
+            if (strlen($address) < 5) {
+                throw new ValidationException("Address must be at least 5 characters long.");
+            }
+            return 1;
+        } catch (Exception $exception) {
+            throw new ValidationException($exception->getMessage());
         }
-        if (strlen($address) < 5) {
-            throw new Exception("Address must be at least 5 characters long.");
-        }
-        return 1;
     }
 
     public function validateEmail(string $email): int
     {
-        $email = $this->sanitizeData($email);
-        if (empty($email)) {
-            throw new Exception("Email is required.");
+        try {
+            $email = $this->sanitizeData($email);
+            if (empty($email)) {
+                throw new ValidationException("Email is required.");
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new ValidationException("Invalid email format.");
+            }
+            return 1;
+        } catch (Exception $exception) {
+            throw new ValidationException($exception->getMessage());
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new Exception("Invalid email format.");
-        }
-        return 1;
     }
 
     public function validatePassword(string $password, string $confirmPassword): int
     {
-        $password = $this->sanitizeData($password);
-        $confirmPassword = $this->sanitizeData($confirmPassword);
+        try {
+            $password = $this->sanitizeData($password);
+            $confirmPassword = $this->sanitizeData($confirmPassword);
 
-        if (empty($password) || empty($confirmPassword)) {
-            throw new Exception("Password and confirmation are required.");
+            if (empty($password) || empty($confirmPassword)) {
+                throw new ValidationException("Password and confirmation are required.");
+            }
+            if ($password !== $confirmPassword) {
+                throw new ValidationException("Passwords do not match.");
+            }
+            if (strlen($password) < 8) {
+                throw new ValidationException("Password must be at least 8 characters long.");
+            }
+            return 1;
+        } catch (Exception $exception) {
+            throw new ValidationException($exception->getMessage());
         }
-        if ($password !== $confirmPassword) {
-            throw new Exception("Passwords do not match.");
-        }
-        if (strlen($password) < 8) {
-            throw new Exception("Password must be at least 8 characters long.");
-        }
-        return 1;
     }
 }

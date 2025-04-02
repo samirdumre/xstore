@@ -6,28 +6,27 @@ require(__DIR__ . '/../../vendor/autoload.php');
 
 use Exception;
 use Hazesoft\Backend\Validations\SignupValidation;
-//use Hazesoft\Backend\Validations\Exception as Exception;
+use Hazesoft\Backend\Validations\ValidationException;
 
-echo "Signup called";
-
-if((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST')) {
-
-    // Capture form data
-    $inputArray = [
-        $_POST['firstName'] ?? '',
-        $_POST['middleName'] ?? 'null',
-        $_POST['lastName'] ?? '',
-        $_POST['address'] ?? '',
-        $_POST['email'] ?? '',
-        $_POST['password'] ?? '',
-        $_POST['confirmPassword'] ?? ''
-    ];
-
-    var_dump(class_exists('Hazesoft\Backend\Validations\SignupValidation'));
-    // Initialize validation
-    $signUpValidator = new SignupValidation();
+if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST')) {
+    try {
+        // Capture form data
+        $inputArray = [
+            $_POST['firstName'] ?? '',
+            $_POST['middleName'] ?? '',
+            $_POST['lastName'] ?? '',
+            $_POST['address'] ?? '',
+            $_POST['email'] ?? '',
+            $_POST['password'] ?? '',
+            $_POST['confirmPassword'] ?? ''
+        ];
+    } catch (Exception $exception) {
+        throw new ValidationException($exception->getMessage());
+    }
 
     try {
+        // Initialize validation
+        $signUpValidator = new SignupValidation();
         $isSignUpValid = $signUpValidator->validateUserInput($inputArray);
 
         if ($isSignUpValid) {
@@ -36,9 +35,9 @@ if((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST')
             // send data to db
 
         } else {
-            throw new Exception("Signup validation error");
+            throw new ValidationException("Signup validation error");
         }
     } catch (Exception $exception) {
-        throw new Exception("Signup validation error: " . $exception->getMessage());
+        throw new ValidationException("Signup validation error: " . $exception->getMessage());
     }
 }

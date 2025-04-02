@@ -6,20 +6,23 @@ require(__DIR__ . '/../../vendor/autoload.php');
 
 use Exception;
 use Hazesoft\Backend\Validations\ProductValidation;
-//use Hazesoft\Backend\Validations\Exception as Exception;
+use Hazesoft\Backend\Validations\ValidationException;
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    // Capture form data
-    $inputArray = [
-        $_POST['productName'] ?? '',
-        $_POST['productPrice'] ?? '',
-        $_POST['productQuantity'] ?? ''
-    ];
-
-    // Initialize validation
-    $productValidator = new ProductValidation();
+    try {
+        // Capture form data
+        $inputArray = [
+            $_POST['productName'] ?? '',
+            $_POST['productPrice'] ?? '',
+            $_POST['productQuantity'] ?? ''
+        ];
+    } catch (Exception $exception) {
+        throw new ValidationException($exception->getMessage());
+    }
 
     try {
+        // Initialize validation
+        $productValidator = new ProductValidation();
         $isProductValid = $productValidator->validateUserInput($inputArray);
 
         if ($isProductValid) {
@@ -28,9 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             // send data to db
 
         } else {
-            throw new Exception("Product validation error");
+            throw new ValidationException("Product validation error");
         }
     } catch (Exception $exception) {
-        throw new Exception("Product validation error: " . $exception->getMessage());
+        throw new ValidationException("Product validation error: " . $exception->getMessage());
     }
 }
