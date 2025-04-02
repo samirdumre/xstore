@@ -2,9 +2,11 @@
 
 namespace Hazesoft\Backend\Validations;
 
+require(__DIR__ . '/../../vendor/autoload.php');
+
 use Exception;
 use Hazesoft\Backend\Validations\Validation;
-use Hazesoft\Backend\Validations\ValidationException as ValidationException;
+//use Hazesoft\Backend\Validations\Exception as Exception;
 
 class LoginValidation extends Validation
 {
@@ -25,7 +27,7 @@ class LoginValidation extends Validation
                 return false;
             }
         } catch (Exception $exception) {
-            throw new ValidationException($exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
     }
 
@@ -33,10 +35,10 @@ class LoginValidation extends Validation
     {
         $email = $this->sanitizeData($email);
         if (empty($email)) {
-            throw new ValidationException("Email is required.");
+            throw new Exception("Email is required.");
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new ValidationException("Invalid email format.");
+            throw new Exception("Invalid email format.");
         }
         return 1;
     }
@@ -46,11 +48,13 @@ class LoginValidation extends Validation
         $password = $this->sanitizeData($password);
 
         if (empty($password)) {
-            throw new ValidationException("Password is required.");
+            throw new Exception("Password is required.");
         }
         if (strlen($password) < 8) {
-            throw new ValidationException("Password must be at least 8 characters long.");
+            throw new Exception("Password must be at least 8 characters long.");
         }
         return 1;
     }
 }
+
+

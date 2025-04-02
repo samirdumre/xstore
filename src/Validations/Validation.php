@@ -2,11 +2,13 @@
 
 namespace Hazesoft\Backend\Validations;
 
+require(__DIR__ . '/../../vendor/autoload.php');
+
 abstract class Validation
 {
     private $sanitize;
 
-    protected function sanitizeData($data)
+    public function sanitizeData($data): string
     {
         $data = trim($data);
         $data = htmlspecialchars($data);

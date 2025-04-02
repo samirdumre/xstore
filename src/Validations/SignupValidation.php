@@ -2,9 +2,11 @@
 
 namespace Hazesoft\Backend\Validations;
 
+require(__DIR__ . '/../../vendor/autoload.php');
+
 use Exception;
 use Hazesoft\Backend\Validations\Validation;
-use Hazesoft\Backend\Validations\ValidationException as ValidationException;
+//use Hazesoft\Backend\Validations\Exception as Exception;
 
 class SignupValidation extends Validation{
     public function validateUserInput(array $inputArray): bool
@@ -28,7 +30,7 @@ class SignupValidation extends Validation{
                 return false;
             }
         } catch (Exception $exception) {
-            throw new ValidationException($exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
         
     }
@@ -37,10 +39,10 @@ class SignupValidation extends Validation{
     {  // type = first name, midlle name or last name
         $name = $this->sanitizeData($name);
         if (empty($name)) {
-            throw new ValidationException("{$type} is required");
+            throw new Exception("{$type} is required");
         }
         if (!preg_match("/^[a-zA-Z\s]+$/", $name)) {
-            throw new ValidationException("{$type} can contain only letters and spaces.");
+            throw new Exception("{$type} can contain only letters and spaces.");
         }
         return 1; // No error
     }
@@ -49,10 +51,10 @@ class SignupValidation extends Validation{
     {
         $address = $this->sanitizeData($address);
         if (empty($address)) {
-            throw new ValidationException("Address is required.");
+            throw new Exception("Address is required.");
         }
         if (strlen($address) < 5) {
-            throw new ValidationException("Address must be at least 5 characters long.");
+            throw new Exception("Address must be at least 5 characters long.");
         }
         return 1;
     }
@@ -61,10 +63,10 @@ class SignupValidation extends Validation{
     {
         $email = $this->sanitizeData($email);
         if (empty($email)) {
-            throw new ValidationException("Email is required.");
+            throw new Exception("Email is required.");
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new ValidationException("Invalid email format.");
+            throw new Exception("Invalid email format.");
         }
         return 1;
     }
@@ -75,13 +77,13 @@ class SignupValidation extends Validation{
         $confirmPassword = $this->sanitizeData($confirmPassword);
 
         if (empty($password) || empty($confirmPassword)) {
-            throw new ValidationException("Password and confirmation are required.");
+            throw new Exception("Password and confirmation are required.");
         }
         if ($password !== $confirmPassword) {
-            throw new ValidationException("Passwords do not match.");
+            throw new Exception("Passwords do not match.");
         }
         if (strlen($password) < 8) {
-            throw new ValidationException("Password must be at least 8 characters long.");
+            throw new Exception("Password must be at least 8 characters long.");
         }
         return 1;
     }

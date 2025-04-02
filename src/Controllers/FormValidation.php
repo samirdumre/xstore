@@ -2,6 +2,8 @@
 
 namespace Hazesoft\Backend\Controllers;
 
+require(__DIR__ . '/../../vendor/autoload.php');
+
 use Hazesoft\Backend\Models\InsertUser;
 use Hazesoft\Backend\Controllers\Sanitization;
 use Exception;

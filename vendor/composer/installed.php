@@ -1,39 +1,21 @@
 <?php return array(
     'root' => array(
-        'name' => 'samir/form-handeling',
+        'name' => 'samir/xstore',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9259d66dab801172d4a98a3ff7479652aa743244',
+        'reference' => '079cc1b15682815c862feb5ebd98dd9de879610a',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'samir/form-handeling' => array(
+        'samir/xstore' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9259d66dab801172d4a98a3ff7479652aa743244',
+            'reference' => '079cc1b15682815c862feb5ebd98dd9de879610a',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/polyfill-mbstring' => array(
-            'pretty_version' => 'v1.31.0',
-            'version' => '1.31.0.0',
-            'reference' => '85181ba99b2345b0ef10ce42ecac37612d9fd341',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/polyfill-mbstring',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'symfony/var-dumper' => array(
-            'pretty_version' => 'v7.2.3',
-            'version' => '7.2.3.0',
-            'reference' => '82b478c69745d8878eb60f9a049a4d584996f73a',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../symfony/var-dumper',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

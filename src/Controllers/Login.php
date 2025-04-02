@@ -2,6 +2,7 @@
 
 namespace Hazesoft\Backend\Controllers;
 
+require(__DIR__ . '/../../vendor/autoload.php');
 
 use Hazesoft\Backend\Controllers\Sanitization;
 use Hazesoft\Backend\Models\CheckUser;

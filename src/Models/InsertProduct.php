@@ -2,6 +2,9 @@
 
 namespace Hazesoft\Backend\Models;
 
+require(__DIR__ . '/../../vendor/autoload.php');
+
+use Exception;
 use Hazesoft\Backend\Config\Connection;
 use Hazesoft\Backend\Controllers\Product;
 

@@ -2,9 +2,11 @@
 
 namespace Hazesoft\Backend\Validations;
 
+require(__DIR__ . '/../../vendor/autoload.php');
+
 use Exception;
 use Hazesoft\Backend\Validations\Validation;
-use Hazesoft\Backend\Validations\ValidationException as ValidationException;
+//use Hazesoft\Backend\Validations\Exception as Exception;
 
 class ProductValidation extends Validation{
     public function validateUserInput(array $inputArray){
@@ -24,7 +26,7 @@ class ProductValidation extends Validation{
                 return false;
             }
         } catch (Exception $exception){
-            throw new ValidationException($exception->getMessage());
+            throw new Exception($exception->getMessage());
         }
     }
 
@@ -32,10 +34,10 @@ class ProductValidation extends Validation{
     { 
         $name = $this->sanitizeData($name);
         if (empty($name)) {
-            throw new ValidationException("Product name is required");
+            throw new Exception("Product name is required");
         }
         if (!preg_match("/^[a-zA-Z\s]+$/", $name)) {
-            throw new ValidationException("Product name can contain only letters and spaces.");
+            throw new Exception("Product name can contain only letters and spaces.");
         }
         return 1; // No error
     }
@@ -44,13 +46,13 @@ class ProductValidation extends Validation{
     { 
         $number = $this->sanitizeData($number);
         if (empty($number)) {
-            throw new ValidationException("{$type} is required");
+            throw new Exception("{$type} is required");
         }
         if($number <= 0){
-            throw new ValidationException("{$type} should be greater than 0");
+            throw new Exception("{$type} should be greater than 0");
         }
         if(!is_numeric($number)){
-            throw new ValidationException("{$type} should be a valid number");
+            throw new Exception("{$type} should be a valid number");
         }
         return 1; // No error
     }
