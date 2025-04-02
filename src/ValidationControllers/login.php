@@ -26,7 +26,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     try {
         // Initialize validation
         $loginValidator = new LoginValidation();
-        $isLoginValid = $loginValidator->validateUserInput($inputArray);
+
+        // Sanitization of inputArray
+        $sanitizedInputArray = $loginValidator->sanitizeArray($inputArray);
+        $isLoginValid = $loginValidator->validateUserInput($sanitizedInputArray);
 
         if ($isLoginValid) {
             echo ("Login validation successful");

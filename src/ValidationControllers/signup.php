@@ -28,7 +28,10 @@ if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST'
     try {
         // Initialize validation
         $signUpValidator = new SignupValidation();
-        $isSignUpValid = $signUpValidator->validateUserInput($inputArray);
+
+        // Sanitization of inputArray
+        $sanitizedInputArray = $signUpValidator->sanitizeArray($inputArray);
+        $isSignUpValid = $signUpValidator->validateUserInput($sanitizedInputArray);
 
         if ($isSignUpValid) {
             echo "Signup validation successful";

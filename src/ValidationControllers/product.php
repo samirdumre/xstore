@@ -24,7 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     try {
         // Initialize validation
         $productValidator = new ProductValidation();
-        $isProductValid = $productValidator->validateUserInput($inputArray);
+
+        // Sanitization of inputArray
+        $sanitizedInputArray = $productValidator->sanitizeArray($inputArray);
+        $isProductValid = $productValidator->validateUserInput($sanitizedInputArray);
 
         if ($isProductValid) {
             echo "Product validation successful";
