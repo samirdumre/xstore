@@ -21,11 +21,12 @@ abstract class Validation
         }
     }
 
-    public function sanitizeArray($array){
-        try{
+    public function sanitizeArray($array)
+    {
+        try {
             $sanitizedArray = array_map([$this, 'sanitizeData'], $array);
-            return $sanitizedArray;
-        } catch(Exception $exception){
+            return $sanitizedArray; 
+        } catch (Exception $exception) {
             throw new Exception($exception->getMessage());
         }
     }

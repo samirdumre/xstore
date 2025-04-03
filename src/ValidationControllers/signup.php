@@ -7,7 +7,7 @@ require(__DIR__ . '/../../vendor/autoload.php');
 use Exception;
 use Hazesoft\Backend\Validations\SignupValidation;
 use Hazesoft\Backend\Validations\ValidationException;
-use Hazesoft\Backend\Models\InsertUser; // Ensure this is the correct namespace for InsertUser
+use Hazesoft\Backend\Models\InsertUser;
 
 if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST')) {
     try {
@@ -29,25 +29,34 @@ if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST'
         // Initialize validation
         $signUpValidator = new SignupValidation();
 
+        // Initialize InsertUser model
+        $insertUserObject = new InsertUser();
+
         // Sanitization of inputArray
         $sanitizedInputArray = $signUpValidator->sanitizeArray($inputArray);
-        $isSignUpValid = $signUpValidator->validateUserInput($sanitizedInputArray);
 
-        if ($isSignUpValid) {
-            echo "Signup validation successful";
-
-            // send data to db
-            $insertUserObject = new InsertUser();
-            $result = $insertUserObject->insertUser($inputArray);
-
-            if($result){
-                echo"User created successfully";
-            } else {
-                echo "User creation failed";
-            }
-
+        // Check if user email exists
+        $doesUserExists = $insertUserObject->doesEmailExists($sanitizedInputArray[4]); // index 4 is for email
+        if ($doesUserExists) {
+            echo "User with this email already exists";
         } else {
-            throw new ValidationException("Signup validation error");
+
+            $isSignUpValid = $signUpValidator->validateUserInput($sanitizedInputArray);
+
+            if ($isSignUpValid) {
+                echo "Signup validation successful";
+
+                // send data to db
+                $result = $insertUserObject->insertUser($inputArray);
+
+                if ($result) {
+                    echo "User created successfully";
+                } else {
+                    echo "User creation failed";
+                }
+            } else {
+                throw new ValidationException("Signup validation error");
+            }
         }
     } catch (Exception $exception) {
         throw new ValidationException("Signup validation error: " . $exception->getMessage());

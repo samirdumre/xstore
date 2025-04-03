@@ -35,4 +35,27 @@ class InsertUser
             throw new Exception("Error inserting userdata into database " . $exception->getMessage());
         }
     }
+    public function doesEmailExists($email)
+    {
+        try {
+            $sql = "SELECT `email` FROM users WHERE `email`='$email'";
+            $userData = $this->conn->query($sql);
+
+            var_dump($email);
+
+            $row = $userData->fetch_assoc();
+
+            // var_dump($row);
+            $userEmail = $row["email"] ?? false;
+            // var_dump($userEmail);
+
+            if ($userEmail) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception $exception) {
+            throw new Exception($exception->getMessage());
+        }
+    }
 }
