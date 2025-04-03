@@ -8,12 +8,12 @@ require(__DIR__ . '/../../vendor/autoload.php');
 
 use Exception;
 use Hazesoft\Backend\Config\Connection;
-use Hazesoft\Backend\Controllers\Product;
+// use Hazesoft\Backend\Controllers\Product;
 
 // $product = new Product();
 // $product->setProductDetails();
 
-class InsertProduct
+class Product
 {
     private $conn;
 

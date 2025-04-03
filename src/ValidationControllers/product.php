@@ -7,7 +7,7 @@ require(__DIR__ . '/../../vendor/autoload.php');
 use Exception;
 use Hazesoft\Backend\Validations\ProductValidation;
 use Hazesoft\Backend\Validations\ValidationException;
-use Hazesoft\Backend\Models\InsertProduct;
+use Hazesoft\Backend\Models\Product;
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     try {
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             echo "Product validation successful";
 
             // send data to db
-            $insertProductObject = new InsertProduct();
+            $insertProductObject = new Product();
             $result = $insertProductObject->insertProductDetails($inputArray);
             if ($result) {
                 echo "Product added successfully";

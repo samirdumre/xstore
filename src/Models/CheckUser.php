@@ -21,8 +21,14 @@ class CheckUser
     {
         try {
             [$email, $password] = $inputArray;
-            $sql = "SELECT `id`, `first_name`, `email`, `password` FROM users WHERE `email`='$email'";
-            $userData = $this->conn->query($sql);
+
+            $stmt = $this->conn->prepare("SELECT `id`, `first_name`, `email`, `password` FROM users WHERE `email`= ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+
+            $userData = $stmt->get_result();
+            // $sql = "SELECT `id`, `first_name`, `email`, `password` FROM users WHERE `email`='$email'";
+            // $userData = $this->conn->query($sql);
 
             $row = $userData->fetch_assoc();
             $hashed_password = $row["password"];

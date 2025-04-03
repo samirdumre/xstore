@@ -23,6 +23,7 @@
                                 if ($session->hasSession("isLoggedIn")) {
                                     echo ", {$session->getSession("firstName")}";
                                 }
+                                
                                 echo '
 </h1>
         <nav>

@@ -38,7 +38,7 @@ class ProductValidation extends Validation
             if (empty($name)) {
                 throw new ValidationException("Product name is required");
             }
-            if (!preg_match("/^[a-zA-Z\s]+$/", $name)) {
+            if (!preg_match("/^[a-zA-Z\d\s]+$/", $name)) {
                 throw new ValidationException("Product name can contain only letters and spaces.");
             }
             return 1; // No error

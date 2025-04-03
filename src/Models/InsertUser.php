@@ -27,8 +27,16 @@ class InsertUser
             // password hashing before inserting to db
             $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $sql = "INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `address`, `email`, `password`, `created_at`, `updated_at`) VALUES ('$firstName', '$middleName', '$lastName', '$address', '$email', '$this->hashedPassword', '$created_at', '$updated_at')";
-            $result = $this->conn->query($sql);
+            // Preventing SQL injection
+            $stmt = $this->conn->prepare("INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `address`, `email`, `password`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->bind_param("ssssssss", $firstName, $middleName, $lastName, $address, $email, $this->hashedPassword, $created_at, $updated_at);
+            
+            $result = $stmt->execute();
+
+            // $sql = "INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `address`, `email`, `password`, `created_at`, `updated_at`) VALUES ('$firstName', '$middleName', '$lastName', '$address', '$email', '$this->hashedPassword', '$created_at', '$updated_at')";
+            // $result = $this->conn->query($sql);
+
+            $stmt->close();
             $this->conn->close();
             return $result;
         } catch (Exception $exception) {
@@ -38,13 +46,14 @@ class InsertUser
     public function doesEmailExists($email)
     {
         try {
-            $sql = "SELECT `email` FROM users WHERE `email`='$email'";
-            $userData = $this->conn->query($sql);
+            $stmt = $this->conn->prepare("SELECT `email` FROM users WHERE `email`= ?");
+            $stmt->bind_param("s", $email);
 
-            var_dump($email);
-
+            $stmt->execute();
+            $userData = $stmt->get_result();
+        
             $row = $userData->fetch_assoc();
-
+            
             // var_dump($row);
             $userEmail = $row["email"] ?? false;
             // var_dump($userEmail);

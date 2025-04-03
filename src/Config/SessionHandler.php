@@ -19,6 +19,7 @@ class SessionHandler{
         return isset($_SESSION[$key]);
     }
     public function destroySession(){  // For logout page
-
+        session_unset();
+        session_destroy();
     }
 }
