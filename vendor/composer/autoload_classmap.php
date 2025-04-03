@@ -7,16 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'Hazesoft\\Backend\\Config\\Connection' => $baseDir . '/src/Config/Connection.php',
-    'Hazesoft\\Backend\\Controllers\\FormValidation' => $baseDir . '/src/Controllers/FormValidation.php',
-    'Hazesoft\\Backend\\Controllers\\Login' => $baseDir . '/src/Controllers/Login.php',
-    'Hazesoft\\Backend\\Controllers\\Product' => $baseDir . '/src/Controllers/Product.php',
-    'Hazesoft\\Backend\\Controllers\\Sanitization' => $baseDir . '/src/Controllers/Sanitization.php',
-    'Hazesoft\\Backend\\Models\\CheckUser' => $baseDir . '/src/Models/CheckUser.php',
-    'Hazesoft\\Backend\\Models\\InsertProduct' => $baseDir . '/src/Models/InsertProduct.php',
-    'Hazesoft\\Backend\\Models\\InsertUser' => $baseDir . '/src/Models/InsertUser.php',
-    'Hazesoft\\Backend\\Validations\\LoginValidation' => $baseDir . '/src/Validations/LoginValidation.php',
-    'Hazesoft\\Backend\\Validations\\ProductValidation' => $baseDir . '/src/Validations/ProductValidation.php',
-    'Hazesoft\\Backend\\Validations\\SignupValidation' => $baseDir . '/src/Validations/SignupValidation.php',
-    'Hazesoft\\Backend\\Validations\\Validation' => $baseDir . '/src/Validations/Validation.php',
 );

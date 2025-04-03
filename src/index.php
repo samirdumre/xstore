@@ -10,9 +10,11 @@
 
 <body>
     <div class="nav">
+
         <h1>Welcome to xStore<?php
 
                                 // require_once(__DIR__ . 'src/Config/SessionHandler.php');
+                                require(__DIR__ . '/../vendor/autoload.php');
 
                                 use Hazesoft\Backend\Config\SessionHandler;
 
@@ -21,36 +23,35 @@
                                 if ($session->hasSession("isLoggedIn")) {
                                     echo ", {$session->getSession("firstName")}";
                                 }
-                                ?>
-        </h1>
+                                echo '
+</h1>
         <nav>
             <ul class="nav-elements">
                 <li class="nav">
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    <a href="src/Views/productsinfo.php">Products</a>
+                    <a href="Views/productsinfo.php">Products</a>
                 </li>
+                                ';
 
-                <?php
-
-                if ($session->hasSession("isLoggedIn")) {
-                    echo '<li>
-                <a href="src/Views/login.html">Sign In</a>
+                                if ($session->hasSession("isLoggedIn") == false) {
+                                    echo '<li>
+                <a href="Views/login.html">Sign In</a>
             </li>
             <li>
-                <a href="src/Views/signup.html">Sign Up</a>
+                <a href="Views/signup.html">Sign Up</a>
             </li> ';
-                } else {
-                    echo '
+                                } else {
+                                    echo '
             <li>
-                <a href="src/Controllers/Logout.php">Logout</a>
+                <a href="Controllers/Logout.php">Logout</a>
             </li> 
                 ';
-                }
-                ?>
+                                }
+                                ?>
             </ul>
-        </nav>
+            </nav>
     </div>
 
 </body>

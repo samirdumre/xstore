@@ -2,6 +2,8 @@
 
 namespace Hazesoft\Backend\Models;
 
+use Hazesoft\Backend\Config\SessionHandler;
+
 require(__DIR__ . '/../../vendor/autoload.php');
 
 use Exception;
@@ -26,11 +28,10 @@ class CheckUser
             $hashed_password = $row["password"];
 
             if (password_verify($password, $hashed_password)) {
-                session_start();
-                $_SESSION["user_id"] = (int)$row["id"];
-                $_SESSION["first_name"] = $row["first_name"];
-                $_SESSION["user_email"] = $row["email"];
-                $_SESSION["isLoggedIn"] = true;
+                $session = new SessionHandler();
+                $session->setSession("userId" , (int)$row["id"]);
+                $session->setSession("firstName" , $row["email"]);
+                $session->setSession("isLoggedIn" , true);
                 return true;
             } else {
                 echo ("Invalid password");

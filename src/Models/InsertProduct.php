@@ -2,6 +2,8 @@
 
 namespace Hazesoft\Backend\Models;
 
+use Hazesoft\Backend\Config\SessionHandler;
+
 require(__DIR__ . '/../../vendor/autoload.php');
 
 use Exception;
@@ -24,11 +26,10 @@ class InsertProduct
     {
         try {
             [$productName, $productPrice, $productQuantity] = $inputArray;
-            session_start();
+            $session = new SessionHandler();
             $created_at = date('Y-m-d H:i:s');
             $updated_at = date('Y-m-d H:i:s');
-            $user_id = (int)$_SESSION['user_id'] ?? rand(1,1000);
-
+            $user_id = (int)$session->getSession("userId") ?? '';
             $sql = "INSERT INTO `products` (`user_id`, `name`, `price`, `quantity`, `created_at`, `updated_at`) VALUES ('$user_id', '$productName', '$productPrice', '$productQuantity', '$created_at', '$updated_at')";
             $result = $this->conn->query($sql);
             return $result;
