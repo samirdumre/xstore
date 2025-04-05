@@ -36,7 +36,7 @@ class CheckUser
             if (password_verify($password, $hashed_password)) {
                 $session = new SessionHandler();
                 $session->setSession("userId" , (int)$row["id"]);
-                $session->setSession("firstName" , $row["email"]);
+                $session->setSession("firstName" , $row["first_name"]);
                 $session->setSession("isLoggedIn" , true);
                 return true;
             } else {

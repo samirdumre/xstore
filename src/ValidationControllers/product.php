@@ -30,17 +30,21 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $isProductValid = $productValidator->validateUserInput($sanitizedInputArray);
 
         if ($isProductValid) {
-            echo "Product validation successful";
+            echo "Product validation successful <br>";
 
             // send data to db
             $insertProductObject = new Product();
             $result = $insertProductObject->insertProductDetails($inputArray);
             if ($result) {
                 echo "Product added successfully";
+                echo '
+                <form action="../Views/showproducts.php" method="POST">
+                    <input type="submit" name="showproducts" value="Show Products">
+                </form>
+                ';
             } else {
                 echo "Product addition failed";
             }
-            
         } else {
             throw new ValidationException("Product validation error");
         }

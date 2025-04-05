@@ -32,14 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $isLoginValid = $loginValidator->validateUserInput($sanitizedInputArray);
 
         if ($isLoginValid) {
-            echo ("Login validation successful");
+            echo ("Login validation successful <br>");
 
             // send data to db
             $checkUserObject = new CheckUser();
             $result = $checkUserObject->checkUser($inputArray);
 
             if ($result) {
-                echo "Login successful";
+                echo "Login successful <br>";
+                echo '
+                        <a href="../Views/showproducts.php">Go to Products page</a>
+                    ';
             } else {
                 echo "Login failed";
             }

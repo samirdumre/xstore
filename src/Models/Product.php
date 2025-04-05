@@ -2,16 +2,12 @@
 
 namespace Hazesoft\Backend\Models;
 
-use Hazesoft\Backend\Config\SessionHandler;
-
 require(__DIR__ . '/../../vendor/autoload.php');
+
+use Hazesoft\Backend\Config\SessionHandler;
 
 use Exception;
 use Hazesoft\Backend\Config\Connection;
-// use Hazesoft\Backend\Controllers\Product;
-
-// $product = new Product();
-// $product->setProductDetails();
 
 class Product
 {
@@ -85,39 +81,57 @@ class Product
         }
     }
 
-    public function deleteProduct($productId) {  
-        try{
+    public function getProductById($productId)
+    {
+        try {
+            $query = "SELECT * FROM products WHERE id = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param("i", $productId);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            $product = $result->fetch_assoc();
+            return $product;
+        } catch (Exception $exception) {
+            echo "Error: " . $exception->getMessage();
+        }
+    }
+
+    public function deleteProduct($productId)
+    {
+        try {
             $query = "DELETE FROM products WHERE id = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param("i", $productId);
             $result = $stmt->execute();
 
-            if($result){
-                header("Location: ../Views/productsinfo.php");
+            if ($result) {
+                header("Location: ../Views/showproducts.php");
             } else {
                 echo "Product deletion went wrong";
             }
-
-        } catch (Exception $exception){
+        } catch (Exception $exception) {
             throw new Exception($exception->getMessage());
         }
     }
 
-    public function updateProduct($productId, $productName, $productPrice, $productQuantity){
-        try{
+    public function updateProduct($productId, array $product)
+    {
+        try {
+            [$productName, $productPrice, $productQuantity] = $product;
+
             $updated_at = date('Y-m-d H:i:s');
             $query = "UPDATE products SET name = ?, price = ?, quantity = ?, updated_at = ? WHERE id = ?";
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("sdis", $productName, $productPrice, $productQuantity, $updated_at);
+            $stmt->bind_param("sdisi", $productName, $productPrice, $productQuantity, $updated_at, $productId);
             $result = $stmt->execute();
-            if($result){
-                header("Location: ../Views/productsinfo.php");
+            if ($result) {
+                header("Location: ../Views/showproducts.php");
             } else {
                 echo "Error updating product, Product Name: {$productName}";
             }
-
-        } catch(Exception $exception){
+        } catch (Exception $exception) {
             throw new Exception($exception->getMessage());
         }
     }

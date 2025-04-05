@@ -18,6 +18,9 @@ class SessionHandler{
     public function hasSession($key): bool{
         return isset($_SESSION[$key]);
     }
+    public function removeSession($key){
+        $_SESSION[$key] =  null;
+    }
     public function destroySession(){  // For logout page
         session_unset();
         session_destroy();

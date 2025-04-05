@@ -38,21 +38,24 @@ if ((isset($_SERVER['REQUEST_METHOD'])) && ($_SERVER['REQUEST_METHOD'] == 'POST'
         // Check if user email exists
         $doesUserExists = $insertUserObject->doesEmailExists($sanitizedInputArray[4]); // index 4 is for email
         if ($doesUserExists) {
-            echo "User with this email already exists";
+            echo "User with this email already exists <br>";
         } else {
 
             $isSignUpValid = $signUpValidator->validateUserInput($sanitizedInputArray);
 
             if ($isSignUpValid) {
-                echo "Signup validation successful";
+                echo "Signup validation successful <br>";
 
                 // send data to db
                 $result = $insertUserObject->insertUser($inputArray);
 
                 if ($result) {
-                    echo "User created successfully";
+                    echo "User created successfully <br>";
+                    echo '
+                        <a href="../Views/login.html">Go to login page</a>
+                    ';
                 } else {
-                    echo "User creation failed";
+                    echo "User creation failed <br>";
                 }
             } else {
                 throw new ValidationException("Signup validation error");
