@@ -2,12 +2,11 @@
 
 namespace Hazesoft\Backend\Models;
 
-require(__DIR__ . '/../../vendor/autoload.php');
-
 use Exception;
-use Hazesoft\Backend\Config\Connection;
+use Hazesoft\Backend\Services\Connection;
+use Hazesoft\Backend\Services\Session;
 
-class InsertUser
+class User
 {
     private $conn;
     private $hashedPassword;
@@ -16,7 +15,38 @@ class InsertUser
         $connection = new Connection();
         $this->conn = $connection->connect();
     }
-    public function insertUser($inputArray)
+    public function checkUser($inputArray): bool
+    {
+        try {
+            [$email, $password] = $inputArray;
+
+            $stmt = $this->conn->prepare("SELECT `id`, `first_name`, `email`, `password` FROM users WHERE `email`= ?");
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+
+            $userData = $stmt->get_result();
+            // $sql = "SELECT `id`, `first_name`, `email`, `password` FROM users WHERE `email`='$email'";
+            // $userData = $this->conn->query($sql);
+
+            $row = $userData->fetch_assoc();
+            $hashed_password = $row["password"];
+
+            if (password_verify($password, $hashed_password)) {
+                $session = Session::getInstance();
+                $session->setSession("userId" , (int)$row["id"]);
+                $session->setSession("firstName" , $row["first_name"]);
+                $session->setSession("isLoggedIn" , true);
+                return true;
+            } else {
+                echo ("Invalid password");
+                return false;
+            }
+        } catch (Exception $exception) {
+            echo ("Invalid email or password " . $exception->getMessage());
+            return false;
+        }
+    }
+    public function insertUser($inputArray): bool
     {
         try {
             [$firstName, $middleName, $lastName, $address, $email, $password, $confirmPassword] = $inputArray; // destructuring of array
@@ -30,7 +60,7 @@ class InsertUser
             // Preventing SQL injection
             $stmt = $this->conn->prepare("INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `address`, `email`, `password`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("ssssssss", $firstName, $middleName, $lastName, $address, $email, $this->hashedPassword, $created_at, $updated_at);
-            
+
             $result = $stmt->execute();
 
             // $sql = "INSERT INTO `users` (`first_name`, `middle_name`, `last_name`, `address`, `email`, `password`, `created_at`, `updated_at`) VALUES ('$firstName', '$middleName', '$lastName', '$address', '$email', '$this->hashedPassword', '$created_at', '$updated_at')";
@@ -43,7 +73,7 @@ class InsertUser
             throw new Exception("Error inserting userdata into database " . $exception->getMessage());
         }
     }
-    public function doesEmailExists($email)
+    public function doesEmailExists($email): bool
     {
         try {
             $stmt = $this->conn->prepare("SELECT `email` FROM users WHERE `email`= ?");
@@ -51,9 +81,9 @@ class InsertUser
 
             $stmt->execute();
             $userData = $stmt->get_result();
-        
+
             $row = $userData->fetch_assoc();
-            
+
             // var_dump($row);
             $userEmail = $row["email"] ?? false;
             // var_dump($userEmail);

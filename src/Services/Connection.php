@@ -1,6 +1,6 @@
 <?php
 
-namespace Hazesoft\Backend\Config;
+namespace Hazesoft\Backend\Services;
 
 use Exception;
 

@@ -2,11 +2,8 @@
 
 namespace Hazesoft\Backend\Validations;
 
-require(__DIR__ . '/../../vendor/autoload.php');
-
 use Exception;
 use Hazesoft\Backend\Validations\Validation;
-//use Hazesoft\Backend\Validations\Exception as Exception;
 
 class SignupValidation extends Validation
 {

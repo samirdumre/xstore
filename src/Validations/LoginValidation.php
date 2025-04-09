@@ -2,15 +2,13 @@
 
 namespace Hazesoft\Backend\Validations;
 
-require(__DIR__ . '/../../vendor/autoload.php');
-
 use Exception;
 use Hazesoft\Backend\Validations\Validation;
 use Hazesoft\Backend\Validations\ValidationException;
 
 class LoginValidation extends Validation
 {
-    public function validateUserInput(array $inputArray)
+    public function validateUserInput(array $inputArray): bool
     {
         try {
             [$email, $password] = $inputArray;
@@ -31,7 +29,7 @@ class LoginValidation extends Validation
         }
     }
 
-    public function validateEmail(string $email)
+    public function validateEmail(string $email): int
     {
         try {
             $email = $this->sanitizeData($email);
@@ -47,7 +45,7 @@ class LoginValidation extends Validation
         }
     }
 
-    public function validatePassword(string $password)
+    public function validatePassword(string $password): int
     {
         try {
             $password = $this->sanitizeData($password);

@@ -2,15 +2,12 @@
 
 namespace Hazesoft\Backend\Validations;
 
-require(__DIR__ . '/../../vendor/autoload.php');
-
 use Exception;
 use Hazesoft\Backend\Validations\Validation;
-//use Hazesoft\Backend\Validations\Exception as Exception;
 
 class ProductValidation extends Validation
 {
-    public function validateUserInput(array $inputArray)
+    public function validateUserInput(array $inputArray): bool
     {
         try {
             [$productName, $productPrice, $productQuantity] = $inputArray;
@@ -31,7 +28,7 @@ class ProductValidation extends Validation
         }
     }
 
-    public function validateName(string $name)
+    public function validateName(string $name): int
     {
         try{
             $name = $this->sanitizeData($name);
@@ -48,7 +45,7 @@ class ProductValidation extends Validation
         
     }
 
-    public function validateNumber(float $number, string $type)
+    public function validateNumber(float $number, string $type): int
     {
         try{
             $number = $this->sanitizeData($number);

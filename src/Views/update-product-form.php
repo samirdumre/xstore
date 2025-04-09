@@ -2,15 +2,13 @@
 
 namespace Hazesoft\Backend\Controllers;
 
-require(__DIR__ . '/../../vendor/autoload.php');
-
 use Hazesoft\Backend\Models\Product;
-use Hazesoft\Backend\Config\SessionHandler;
+use Hazesoft\Backend\Services\Session;
 
 if (isset($_GET['id'])) {
     $productId = $_GET['id'];
 
-    $session = new SessionHandler();
+    $session = Session::getInstance();
     $session->setSession("productId", $productId);
     // $_POST['productId'] = $productId;
     
@@ -33,24 +31,25 @@ if (isset($_GET['id'])) {
 </head>
 
 <body>
-    <form action="../Controllers/updateProduct.php" method="POST">
+    <form action="/products/update" method="POST">
+        <input type="hidden" name="id" value="<?= $productId ?>">
         <div class="input">
             <label for="name">
                 Product name:
+                <input type="text" name="productName" value=<?= $currentProduct['name'] ?> required>
             </label>
-            <input type="text" name="productName" value=<?= $currentProduct['name'] ?> required>
         </div>
         <div class="input">
             <label for="price">
                 Price:
+                <input type="text" name="productPrice" value=<?= $currentProduct['price'] ?> required>
             </label>
-            <input type="text" name="productPrice" value=<?= $currentProduct['price'] ?> required>
         </div>
         <div class="input">
             <label for="quantity">
                 Quantity:
+                <input type="text" name="productQuantity" value=<?= $currentProduct['quantity'] ?> required>
             </label>
-            <input type="text" name="productQuantity" value=<?= $currentProduct['quantity'] ?> required>
         </div>
         <div class="input">
             <input type="submit" name="submit" value="Submit">

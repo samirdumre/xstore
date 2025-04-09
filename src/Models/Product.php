@@ -2,12 +2,9 @@
 
 namespace Hazesoft\Backend\Models;
 
-require(__DIR__ . '/../../vendor/autoload.php');
-
-use Hazesoft\Backend\Config\SessionHandler;
-
 use Exception;
-use Hazesoft\Backend\Config\Connection;
+use Hazesoft\Backend\Services\Connection;
+use Hazesoft\Backend\Services\Session;
 
 class Product
 {
@@ -22,7 +19,7 @@ class Product
     {
         try {
             [$productName, $productPrice, $productQuantity] = $inputArray;
-            $session = new SessionHandler();
+            $session = Session::getInstance();
             $created_at = date('Y-m-d H:i:s');
             $updated_at = date('Y-m-d H:i:s');
             $user_id = (int)$session->getSession("userId") ?? '';
@@ -106,7 +103,7 @@ class Product
             $result = $stmt->execute();
 
             if ($result) {
-                header("Location: ../Views/showproducts.php");
+                header("Location: ../Views/show-products.php");
             } else {
                 echo "Product deletion went wrong";
             }
@@ -126,9 +123,7 @@ class Product
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param("sdisi", $productName, $productPrice, $productQuantity, $updated_at, $productId);
             $result = $stmt->execute();
-            if ($result) {
-                header("Location: ../Views/showproducts.php");
-            } else {
+            if (!$result) {
                 echo "Error updating product, Product Name: {$productName}";
             }
         } catch (Exception $exception) {

@@ -2,8 +2,6 @@
 
 namespace Hazesoft\Backend\Validations;
 
-require(__DIR__ . '/../../vendor/autoload.php');
-
 use Exception;
 
 abstract class Validation
@@ -21,7 +19,7 @@ abstract class Validation
         }
     }
 
-    public function sanitizeArray($array)
+    public function sanitizeArray($array): array
     {
         try {
             $sanitizedArray = array_map([$this, 'sanitizeData'], $array);

@@ -6,7 +6,7 @@
 
 <body>
     <div class="form">
-        <form action="../ValidationControllers/product.php" method="POST">
+        <form action="/products" method="POST">
             <div class="input">
                 <label for="name">
                     Product name:
@@ -29,17 +29,16 @@
                 <input type="submit" name="submit" value="Submit">
             </div>
         </form>
-        <form action="showproducts.php" method="POST">
+        <form action="/products" method="GET">
             <div class="input">
                 <input type="submit" name="showproducts" value="Show Products">
             </div>
         </form>
-        <form action="../" method="POST">
+        <form action="/logout" method="POST">
             <div class="input">
-                <input type="submit" name="home" value="Home">
+                <input type="submit" name="logout" value="Logout">
             </div>
         </form>
     </div>
 </body>
-
 </html>
