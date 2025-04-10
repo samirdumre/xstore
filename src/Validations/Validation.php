@@ -15,7 +15,7 @@ abstract class Validation
             $data = htmlspecialchars($data);
             return $data;
         } catch (Exception $exception) {
-            throw new ValidationException($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 
@@ -25,7 +25,7 @@ abstract class Validation
             $sanitizedArray = array_map([$this, 'sanitizeData'], $array);
             return $sanitizedArray; 
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 

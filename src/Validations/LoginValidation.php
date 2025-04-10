@@ -25,7 +25,7 @@ class LoginValidation extends Validation
                 return false;
             }
         } catch (Exception $exception) {
-            throw new ValidationException($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 
@@ -34,14 +34,14 @@ class LoginValidation extends Validation
         try {
             $email = $this->sanitizeData($email);
             if (empty($email)) {
-                throw new ValidationException("Email is required.");
+                echo("Email is required.");
             }
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                throw new ValidationException("Invalid email format.");
+                echo("Invalid email format.");
             }
             return 1;
         } catch (Exception $exception) {
-            throw new ValidationException($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 
@@ -51,14 +51,14 @@ class LoginValidation extends Validation
             $password = $this->sanitizeData($password);
 
             if (empty($password)) {
-                throw new ValidationException("Password is required.");
+                echo("Password is required.");
             }
             if (strlen($password) < 8) {
-                throw new ValidationException("Password must be at least 8 characters long.");
+                echo("Password must be at least 8 characters long.");
             }
             return 1;
         } catch (Exception $exception) {
-            throw new ValidationException($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 }

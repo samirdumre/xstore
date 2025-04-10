@@ -24,7 +24,7 @@ class ProductValidation extends Validation
                 return false;
             }
         } catch (Exception $exception) {
-            throw new ValidationException($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 
@@ -33,14 +33,14 @@ class ProductValidation extends Validation
         try{
             $name = $this->sanitizeData($name);
             if (empty($name)) {
-                throw new ValidationException("Product name is required");
+                echo("Product name is required");
             }
             if (!preg_match("/^[a-zA-Z\d\s]+$/", $name)) {
-                throw new ValidationException("Product name can contain only letters and spaces.");
+                echo("Product name can contain only letters and spaces.");
             }
             return 1; // No error
         } catch(Exception $exception){
-            throw new ValidationException($exception->getMessage());
+            echo($exception->getMessage());
         }
         
     }
@@ -50,17 +50,17 @@ class ProductValidation extends Validation
         try{
             $number = $this->sanitizeData($number);
             if (empty($number)) {
-                throw new ValidationException("{$type} is required");
+                echo("{$type} is required");
             }
             if ($number <= 0) {
-                throw new ValidationException("{$type} should be greater than 0");
+                echo("{$type} should be greater than 0");
             }
             if (!is_numeric($number)) {
-                throw new ValidationException("{$type} should be a valid number");
+                echo("{$type} should be a valid number");
             }
             return 1; // No error
         } catch (Exception $exception){
-            throw new ValidationException($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 }

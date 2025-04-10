@@ -8,8 +8,8 @@ use Hazesoft\Backend\Services\Session;
 if (isset($_GET['id'])) {
     $productId = $_GET['id'];
 
-    $session = Session::getInstance();
-    $session->setSession("productId", $productId);
+//    $session = Session::getInstance();
+//    $session->setSession("productId", $productId);
     // $_POST['productId'] = $productId;
     
     $productObject = new Product();

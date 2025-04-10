@@ -12,8 +12,7 @@ class Product
 
     public function __construct()
     {
-        $connection = new Connection();
-        $this->conn = $connection->connect();
+        $this->conn = Connection::getConnection();
     }
     public function insertProductDetails($inputArray)
     {
@@ -23,11 +22,23 @@ class Product
             $created_at = date('Y-m-d H:i:s');
             $updated_at = date('Y-m-d H:i:s');
             $user_id = (int)$session->getSession("userId") ?? '';
-            $sql = "INSERT INTO `products` (`user_id`, `name`, `price`, `quantity`, `created_at`, `updated_at`) VALUES ('$user_id', '$productName', '$productPrice', '$productQuantity', '$created_at', '$updated_at')";
-            $result = $this->conn->query($sql);
-            return $result;
+
+            $sql = "INSERT INTO `products` (`user_id`, `name`, `price`, `quantity`, `created_at`, `updated_at`) VALUES (:user_id, :name, :price, :quantity, :created_at, :updated_at)";
+
+            $stmt = $this->conn->prepare($sql);
+
+            $stmt->bindParam(':user_id', $user_id);
+            $stmt->bindParam(':name', $productName);
+            $stmt->bindParam(':price', $productPrice);
+            $stmt->bindParam(':quantity', $productQuantity);
+            $stmt->bindParam(':created_at', $created_at);
+            $stmt->bindParam(':updated_at', $updated_at);
+
+            return $stmt->execute();
+
         } catch (Exception $exception) {
             echo ("Error inserting product " . $exception->getMessage());
+            return false;
         }
     }
 
@@ -37,58 +48,53 @@ class Product
             $query = "SELECT * from products";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
-            $result = $stmt->get_result();
 
-            $products = $result->fetch_all(MYSQLI_ASSOC);
-            return $products;
+            return $stmt->fetchAll(); // Return products array
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 
     public function getUserProducts($userId)
     {
         try {
-            $query = "SELECT * FROM products WHERE user_id = ?";
+            $query = "SELECT * FROM products WHERE user_id = :user_id";
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("i", $userId);
+            $stmt->bindParam(':user_id', $userId);
             $stmt->execute();
-            $result = $stmt->get_result();
 
-            $products = $result->fetch_all(MYSQLI_ASSOC);
-            return $products;
+            return $stmt->fetchAll();
+
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
     public function getOtherProducts($userId)
     {
         // returns all product except for user's
         try {
-            $query = "SELECT * FROM products WHERE user_id != ?";
+            $query = "SELECT * FROM products WHERE user_id != :user_id";
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("i", $userId);
+            $stmt->bindParam(':user_id', $userId);
             $stmt->execute();
-            $result = $stmt->get_result();
 
-            $products = $result->fetch_all(MYSQLI_ASSOC);
-            return $products;
+            return $stmt->fetchAll();
+
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 
     public function getProductById($productId)
     {
         try {
-            $query = "SELECT * FROM products WHERE id = ?";
+            $query = "SELECT * FROM products WHERE id = :product_id";
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("i", $productId);
+            $stmt->bindParam(':product_id', $productId);
             $stmt->execute();
-            $result = $stmt->get_result();
 
-            $product = $result->fetch_assoc();
-            return $product;
+            return $stmt->fetch();
+
         } catch (Exception $exception) {
             echo "Error: " . $exception->getMessage();
         }
@@ -97,18 +103,18 @@ class Product
     public function deleteProduct($productId)
     {
         try {
-            $query = "DELETE FROM products WHERE id = ?";
+            $query = "DELETE FROM products WHERE id = :product_id";
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("i", $productId);
+            $stmt->bindParam(':product_id', $productId);
             $result = $stmt->execute();
 
             if ($result) {
-                header("Location: ../Views/show-products.php");
+                header("Location: /products");
             } else {
                 echo "Product deletion went wrong";
             }
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 
@@ -118,16 +124,23 @@ class Product
             [$productName, $productPrice, $productQuantity] = $product;
 
             $updated_at = date('Y-m-d H:i:s');
-            $query = "UPDATE products SET name = ?, price = ?, quantity = ?, updated_at = ? WHERE id = ?";
+            $query = "UPDATE products SET name = :product_name, price = :product_price, quantity = :product_quantity, updated_at = :updated_at WHERE id = :product_id";
 
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param("sdisi", $productName, $productPrice, $productQuantity, $updated_at, $productId);
+
+            $stmt->bindParam(':product_name', $productName);
+            $stmt->bindParam(':product_price', $productPrice);
+            $stmt->bindParam(':product_quantity', $productQuantity);
+            $stmt->bindParam(':updated_at', $updated_at);
+            $stmt->bindParam(':product_id', $productId);
+
             $result = $stmt->execute();
+
             if (!$result) {
                 echo "Error updating product, Product Name: {$productName}";
             }
         } catch (Exception $exception) {
-            throw new Exception($exception->getMessage());
+            echo($exception->getMessage());
         }
     }
 }

@@ -4,26 +4,22 @@ namespace Hazesoft\Backend\Controllers\ProductController;
 
 use Exception;
 use Hazesoft\Backend\Models\Product;
-use Hazesoft\Backend\Services\Session;
 use Hazesoft\Backend\Validations\ProductValidation;
 use Hazesoft\Backend\Validations\ValidationException;
 
 class ProductController
 {
     private $product;
-    private $session;
     private $productValidator;
 
     public function __construct()
     {
         $this->product = new Product();
         $this->productValidator = new ProductValidation();
-        $this->session = Session::getInstance();
     }
 
     public function handleUpdateProductForm(): void
     {
-//        $productId = $this->session->getSession("productId");
         if (isset($_POST['id'])) {
             $productId = $_POST['id'];
         } else {
@@ -38,8 +34,6 @@ class ProductController
                     $_POST['productPrice'] ?? '',
                     $_POST['productQuantity'] ?? ''
                 ];
-
-                $this->session->removeSession("productId");
 
                 // Sanitization of inputArray
                 $sanitizedProductArray = $this->productValidator->sanitizeArray($product);

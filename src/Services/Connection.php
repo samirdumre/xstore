@@ -3,35 +3,43 @@
 namespace Hazesoft\Backend\Services;
 
 use Exception;
+use PDO;
+use PDOException;
 
 class Connection
 {
-    private $servername;
-    private $username;
-    private $password;
-    private $dbname;
-    private $conn;
+    private static ?Connection $instance = null;
+    private $host = '127.0.0.1';
+    private $username = 'root';
+    private $password = '';
+    private $dbname = 'mydb';
+    private $charset = 'utf8mb4';
+    private $connection;
+    private $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ];
 
-    public function __construct($servername = '127.0.0.1', $username = 'root', $password = '', $dbname = 'mydb')
+    private function __construct()
     {
-        $this->servername = $servername;
-        $this->username = $username;
-        $this->password = $password;
-        $this->dbname = $dbname;
+        $dsn = "mysql:host={$this->host};dbname={$this->dbname};charset={$this->charset}";
+
+        try {
+            $this->connection = new PDO($dsn, $this->username, $this->password, $this->options);
+        } catch (PDOException $exception) {
+            echo("Database connection failed: " . $exception->getMessage());
+        }
     }
 
-    public function connect()
+    public static function getInstance()
     {
-        try {
-            $this->conn = new \mysqli($this->servername, $this->username, $this->password, $this->dbname);
-
-            if ($this->conn->connect_error) {
-                die("Error connecting to database" . $this->conn->connect_error);
-            }
-            $conn = $this->conn;
-            return $conn;
-        } catch (Exception $exception) {
-            die("Error connecting to the database: " . $exception->getMessage());
+        if(self::$instance === null){
+            self::$instance = new self();
         }
+        return self::$instance;
+    }
+
+    public static function getConnection()
+    {
+        return self::getInstance()->connection;
     }
 }

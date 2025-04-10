@@ -13,9 +13,8 @@ return [
         '/products' => [ProductController::class, 'getProductsPage'],
         '/products/create' => [ProductController::class, 'getAddProductPage'],
         '/products/update' => [ProductController::class, 'getUpdateProductPage'],
-
-
         ],
+        
     "POST" => [
         '/login' => [LogInController::class, 'handleLoginForm'],
         '/signup' => [SignUpController::class, 'handleSignUpForm'],
